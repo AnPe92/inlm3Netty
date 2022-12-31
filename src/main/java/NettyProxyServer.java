@@ -22,8 +22,6 @@ public class NettyProxyServer {
         this.workerGroup = new NioEventLoopGroup();
     }
 
-
-
     public void start() throws InterruptedException {
 
         var bootstrap = new ServerBootstrap();
@@ -34,7 +32,6 @@ public class NettyProxyServer {
 
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
-                        System.out.println("Inside nettyproxyserver initizlizer -> handler");
                         ChannelPipeline pipeline = socketChannel.pipeline();
                         pipeline.addLast(new ProxyServerHandler(NettyProxyServer.this));
 

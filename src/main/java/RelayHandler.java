@@ -16,7 +16,7 @@ public class RelayHandler extends SimpleChannelInboundHandler<ByteBuf> {
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
         channel.writeAndFlush(byteBuf.copy());
         node.addRequest();
-        System.out.println("in channelread relayhandler");
+
     }
 
     @Override

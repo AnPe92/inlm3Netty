@@ -7,15 +7,9 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.HttpRequest;
-import io.netty.handler.codec.http.HttpRequestDecoder;
-
-import java.nio.charset.StandardCharsets;
 
 
 public class ProxyServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
-
     private Channel channel;
     private final NettyProxyServer server;
 
@@ -28,7 +22,6 @@ public class ProxyServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("in channel active proxy server handler " );
         var bootstrap = new Bootstrap();
         var node = server.getNodeHandler().next();
 
@@ -38,7 +31,6 @@ public class ProxyServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
-                        System.out.println("Inside serverhandler initilizer -> handller");
                         var pipeline = socketChannel.pipeline();
                         pipeline.addLast(new RelayHandler(node, ctx.channel()));
 
@@ -51,7 +43,6 @@ public class ProxyServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
-
             channel.writeAndFlush(byteBuf.copy());
 
     }

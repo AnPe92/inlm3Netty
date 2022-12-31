@@ -23,14 +23,13 @@ public class NodeHandler {
         this.lock = new ReentrantReadWriteLock();
         this.portCounter = 8080;
 
-        this.startNode(3);
+        this.startNode(2);
         this.startThread();
     }
 
 
     public void addStartedNodesToList(Node node){
         currentNodes.add(node);
-        System.out.println("in add started node to list");
     }
     public Node next() {
         return balancer.next(currentNodes);
@@ -97,8 +96,9 @@ public class NodeHandler {
         }
 
         var requestsPerNode = request / (double)currentNodes.size();
+        request = 0.0;
 
-        if(requestsPerNode < 2) {
+        if(requestsPerNode < 2 && currentNodes.size() > 2) {
             var node = currentNodes.get(currentNodes.size()-1);
             node.stop();
         }
